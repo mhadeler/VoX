@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" theme="dark">
+
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <title>VoX</title>
+      <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+    
+	<header class="header">
+        <img src="icon_128.png" alt="VoX Extension" class="logo-icon" width="100">
+		<h1 class="extensionName popup">VoX</h1>
+	</header>
+
+    <textarea id="dictationTextArea" style="display: none"></textarea>
+
+    <nav class="tabNavigation popup">
+        <div class="navTab active" divid="resourceList">Resources</div>
+        <div class="navTab" divid="extensionInfo">Info/About</div>
+    </nav>
+    
+    <section class="mainContent active popup" id="resourceList">
+
+        <div class="resourceMainContainer" id="addResourcePage">
+            <div class="resourceInputContainer">
+                <input type="text" name="resourceURL" id="resourceIDInput" style="display: none">
+                <div class="resourceInput">
+                    <button class="resourceButton" id="resourceBackButton">Back</button>
+                </div>
+                <div class="resourceInput">
+                    <label for="resourceName">Resource Name:</label>
+                    <input type="text" name="resourceName" id="resourceNameInput"> 
+                </div>
+                <div class="resourceInput">
+                    <label for="resourceURL">Resource URL:</label>
+                    <input type="text" name="resourceURL" id="resourceURLInput">
+                </div>
+                <div class="resourceInput">
+                    <label for="keywordList">Keywords (comma-separated and ordered from least to most important):</label>
+                    <textarea name="keywordList" id="keywordListInput"></textarea>
+                </div>                
+                <div class="resourceInput">
+                    <button class="resourceButton" id="saveResourceButton">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="resourceMainContainer active" id="resourceListPage">
+            <div class="resourceContainer" id="resourceItemContainer"></div>
+            <button class="resourceButton" id="addResourceButton">Add New Resource</button>
+        </div>
+    </section>
+
+    <section class="mainContent popup" id="extensionInfo">
+        <div class="infoMainContainer home active">
+            <!-- <div class="infoHeader">About Vox</div> -->
+            <div class="infoText">
+                <p>Hello! Click a topic to learn more.</p>
+            </div>
+        </div>      
+    </section>
+    
+    <script src="popup.js"></script>
+    <script src="speechRecog.js"></script>
+  </body>
+
+</html>
+
