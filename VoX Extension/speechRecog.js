@@ -19,8 +19,6 @@ recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.maxAlternatives = 2;
 
-
-
 recognition.onresult = function(event) {
   let speechResult = event.results[0][0].transcript;
 
@@ -36,7 +34,7 @@ recognition.onresult = function(event) {
   }
 
   if (params.mode && params.mode == 'start_dictation') {
-    dictationTextArea.value = speechResult;
+    dictationTextArea.value += speechResult;
     return;
   }
 
