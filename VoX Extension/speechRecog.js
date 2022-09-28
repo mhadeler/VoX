@@ -34,7 +34,7 @@ recognition.onresult = function(event) {
   }
 
   if (params.mode && params.mode == 'start_dictation') {
-    dictationTextArea.value += '. ' + speechResult;
+    dictationTextArea.value += speechResult + '. ';
     return;
   }
 
