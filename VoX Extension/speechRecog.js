@@ -5,37 +5,69 @@ const recognition = new SpeechRecognition();
 var closeAfter = false;
 var dictationTextArea = document.querySelector('textarea#dictationTextArea');
 
-if (params.mode) {
-    recognition.start();
-    if (params.mode == 'search_open') {
-        closeAfter = true;
-    } else if (params.mode == 'start_dictation') {
-        dictationTextArea.style.display = null;
-    }
-}
-
 recognition.continuous = false;
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.maxAlternatives = 2;
+recognition.started = false;
+
+if (params.mode) {
+  if (params.mode == 'search_open') {
+      closeAfter = true;
+  } else if (params.mode == 'start_dictation') {
+      dictationTextArea.style.display = null;
+      recognition.continuous = true;
+  }
+  toggleRecognitionStart(true);
+}
+
+function toggleRecognitionStart(turnon) {
+  var start = turnon === undefined ? !recognition.started:turnon;
+  if (!start) {
+    recognition.stop();
+    icon.classList.remove('active');
+    recognition.started = false;
+  } else {
+    recognition.start();
+    icon.classList.add('active');
+    recognition.started = true;
+  }
+}
+
+window.onblur = function() {
+  toggleRecognitionStart(false);
+}
 
 recognition.onresult = function(event) {
-  let speechResult = event.results[0][0].transcript;
+  var results = event.results;
+  if (params.mode && params.mode == 'start_dictation') {
+    handleDictation(results);
+  } else {
+    handleNavigation(results);
+  }
+}  
 
-  console.log(event.results);
-  console.log('Confidence: ' + event.results[0][0].confidence);
-  
+function handleDictation(results) {
+  var resultString = results[results.length-1][0].transcript.trim();
+  var str = dictationTextArea.value;
+  if (str[str.length-2] != ',') {
+    resultString = resultString.charAt(0).toUpperCase() + resultString.slice(1);
+  }
+  var lastChar = resultString[resultString.length-1];
+  var endPunc = '.,?'.includes(lastChar) ? ' ':'. ';
+  dictationTextArea.value += resultString + endPunc;
+  return;
+}
+
+function handleNavigation(results) {
+  let speechResult = results[0][0].transcript;
+  console.log('Confidence: ' + results[0][0].confidence);
   var text = speechResult.toLowerCase();
   var matches;
 
   function performMatch(textInput, regex) {
     matches = textInput.match(regex);
     return matches
-  }
-
-  if (params.mode && params.mode == 'start_dictation') {
-    dictationTextArea.value += speechResult + '. ';
-    return;
   }
 
   if (performMatch(text, /.*(go to|open|get).*?/)) {
@@ -68,11 +100,12 @@ recognition.onresult = function(event) {
     window.open("https://www.youtube.com/" + ((query) ? "results?search_query="+encodeURIComponent(query):""), "_blank");
     if (closeAfter) window.close();
   }
-
-}    
+}
 
 recognition.onspeechend = function() {
-    icon.classList.remove('active');
-    recognition.stop();
-}    
+    if (params.mode != 'start_dictation') {
+      toggleRecognitionStart(false);
+    }
+}
+
 

@@ -2,7 +2,7 @@
     "manifest_version": 3,
 	"name": "VoX",
     "description": "Voice recognition tool for dictation and quick opening/searching of resources",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"icons": {"128": "icon_128.png"},
 	"background": {
 		"service_worker": "background.js"
